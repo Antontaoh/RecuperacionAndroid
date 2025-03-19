@@ -27,10 +27,10 @@ class CountryViewModel : ViewModel() {
                     else -> emptyList()
                 }
 
-                _countries.postValue(result) // ✅ Usar postValue para actualización segura en LiveData
+                _countries.postValue(result)
 
             } catch (e: Exception) {
-                Log.e("CountryViewModel", "Error al obtener países", e) // ✅ Mejor log de error
+                Log.e("CountryViewModel", "Error al obtener países", e)
                 _countries.postValue(emptyList())
             }
         }
