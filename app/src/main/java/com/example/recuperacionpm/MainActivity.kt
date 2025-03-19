@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra("country", country)
                     startActivity(intent)
                 },
-                onLongClick = { country s->
+                onLongClick = { country ->
                     val intent = Intent(this, CountryInfoActivity::class.java)
                     intent.putExtra("country", country)
                     startActivity(intent)
