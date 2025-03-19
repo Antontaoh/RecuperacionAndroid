@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.recuperacionpm.model.Country
-import com.example.recuperacionpm.service.CountryApiService
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: CountryViewModel
@@ -23,25 +21,40 @@ class MainActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // 🔹 Inicializar el adapter una sola vez y actualizar la lista después
-        adapter = CountryAdapter(emptyList()) { country ->
-            val intent = Intent(this, CountryDetailActivity::class.java)
-            intent.putExtra("country", country) // ✅ Si `Country` es Parcelable, no necesitas `as Serializable`
-            startActivity(intent)
-        }
-        recyclerView.adapter = adapter
-
-        // 🔹 Optimización: En lugar de crear un nuevo Adapter, solo actualizamos los datos
-        viewModel.countries.observe(this) { countries ->
-            adapter = CountryAdapter(countries) { country ->
+        // 🔹 Inicializar el adapter con click normal y click largo
+        adapter = CountryAdapter(emptyList(),
+            onClick = { country ->
                 val intent = Intent(this, CountryDetailActivity::class.java)
                 intent.putExtra("country", country)
                 startActivity(intent)
+            },
+            onLongClick = { country ->
+                val intent = Intent(this, CountryInfoActivity::class.java)
+                intent.putExtra("country", country)
+                startActivity(intent)
             }
+        )
+        recyclerView.adapter = adapter
+
+        // 🔹 Optimización: Actualizar la lista sin recrear el adapter
+        viewModel.countries.observe(this) { countries ->
+            adapter = CountryAdapter(countries,
+                onClick = { country ->
+                    val intent = Intent(this, CountryDetailActivity::class.java)
+                    intent.putExtra("country", country)
+                    startActivity(intent)
+                },
+                onLongClick = { country s->
+                    val intent = Intent(this, CountryInfoActivity::class.java)
+                    intent.putExtra("country", country)
+                    startActivity(intent)
+                }
+            )
             recyclerView.adapter = adapter
         }
 
         viewModel.fetchCountries("Europe") // Cargar Europa por defecto
     }
 }
+
 

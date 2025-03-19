@@ -26,6 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CountryDetailActivity"/>
+        <activity android:name=".CountryDetailActivity" android:exported="true"/>
+        <activity android:name=".CountryInfoActivity" android:exported="true"/>
     </application>
 </manifest>
