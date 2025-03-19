@@ -1,35 +1,33 @@
 package com.example.recuperacionpm
+
 import android.os.Bundle
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.recuperacionpm.databinding.ActivityCountryDetailBinding
 import com.example.recuperacionpm.model.Country
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 
-class CountryDetailActivity : AppCompatActivity(), OnMapReadyCallback {
-    private lateinit var binding: ActivityCountryDetailBinding
-    private lateinit var mMap: GoogleMap
-    private lateinit var country: Country
-
+class CountryDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCountryDetailBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_country_detail)
 
-        country = intent.getSerializableExtra("country") as Country
+        val webView = findViewById<WebView>(R.id.webView)
+        webView.webViewClient = WebViewClient()
+        webView.settings.javaScriptEnabled = true
 
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-    }
+        // Obtener los datos del Intent de manera segura
+        val country = intent.getSerializableExtra("country") as? Country
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-        val location = LatLng(country.latlng?.get(0) ?: 0.0, country.latlng?.get(1) ?: 0.0)
-        mMap.addMarker(MarkerOptions().position(location).title(country.name["spa"]))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 5f))
+        if (country?.latlng != null && country.latlng.size >= 2) {
+            val lat = country.latlng[0]
+            val lng = country.latlng[1]
+            val mapUrl = "https://www.openstreetmap.org/?mlat=$lat&mlon=$lng&zoom=6"
+            webView.loadUrl(mapUrl)
+        } else {
+            Toast.makeText(this, "Ubicación no disponible", Toast.LENGTH_SHORT).show()
+        }
     }
 }
+
+

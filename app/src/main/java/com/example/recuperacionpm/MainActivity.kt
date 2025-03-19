@@ -1,18 +1,18 @@
 package com.example.recuperacionpm
 
+import CountryAdapter
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.io.Serializable
+import com.example.recuperacionpm.model.Country
+import com.example.recuperacionpm.service.CountryApiService
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: CountryViewModel
+    private lateinit var adapter: CountryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,14 +23,25 @@ class MainActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        // 🔹 Inicializar el adapter una sola vez y actualizar la lista después
+        adapter = CountryAdapter(emptyList()) { country ->
+            val intent = Intent(this, CountryDetailActivity::class.java)
+            intent.putExtra("country", country) // ✅ Si `Country` es Parcelable, no necesitas `as Serializable`
+            startActivity(intent)
+        }
+        recyclerView.adapter = adapter
+
+        // 🔹 Optimización: En lugar de crear un nuevo Adapter, solo actualizamos los datos
         viewModel.countries.observe(this) { countries ->
-            recyclerView.adapter = CountryAdapter(countries) { country ->
+            adapter = CountryAdapter(countries) { country ->
                 val intent = Intent(this, CountryDetailActivity::class.java)
-                intent.putExtra("country", country as Serializable)
+                intent.putExtra("country", country)
                 startActivity(intent)
             }
+            recyclerView.adapter = adapter
         }
 
         viewModel.fetchCountries("Europe") // Cargar Europa por defecto
     }
 }
+
