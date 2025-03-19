@@ -16,7 +16,6 @@ class CountryDetailActivity : AppCompatActivity() {
         webView.webViewClient = WebViewClient()
         webView.settings.javaScriptEnabled = true
 
-        // Obtener los datos del Intent de manera segura
         val country = intent.getSerializableExtra("country") as? Country
 
         if (country?.latlng != null && country.latlng.size >= 2) {
