@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RecuperacionPM</string>
+    <string name="flag_image_description">Descripción de la bandera</string>
 </resources>
