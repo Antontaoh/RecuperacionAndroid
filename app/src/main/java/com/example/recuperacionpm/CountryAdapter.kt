@@ -11,7 +11,7 @@ import com.example.recuperacionpm.model.Country
 class CountryAdapter(
     private val countries: List<Country>,
     private val onClick: (Country) -> Unit,
-    private val onLongClick: (Country) -> Unit // 🔹 Nuevo parámetro para click largo
+    private val onLongClick: (Country) -> Unit 
 ) : RecyclerView.Adapter<CountryAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -30,16 +30,14 @@ class CountryAdapter(
 
         Glide.with(holder.itemView.context)
             .load(country.flags.png)
-            .placeholder(R.drawable.default_flag) // Imagen por defecto en caso de error
+            .placeholder(R.drawable.default_flag)
             .into(holder.flagImage)
 
-        // 🔹 Click normal → Abre el mapa
         holder.itemView.setOnClickListener { onClick(country) }
 
-        // 🔹 Click largo → Abre la vista de detalles
         holder.itemView.setOnLongClickListener {
             onLongClick(country)
-            true // 🔹 Retornar true indica que el evento fue consumido
+            true 
         }
     }
 
