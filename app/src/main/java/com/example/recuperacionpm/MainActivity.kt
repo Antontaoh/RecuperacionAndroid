@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // 🔹 Inicializar el adapter con click normal y click largo
         adapter = CountryAdapter(emptyList(),
             onClick = { country ->
                 val intent = Intent(this, CountryDetailActivity::class.java)
@@ -36,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         )
         recyclerView.adapter = adapter
 
-        // 🔹 Optimización: Actualizar la lista sin recrear el adapter
         viewModel.countries.observe(this) { countries ->
             adapter = CountryAdapter(countries,
                 onClick = { country ->
@@ -53,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             recyclerView.adapter = adapter
         }
 
-        viewModel.fetchCountries("Europe") // Cargar Europa por defecto
+        viewModel.fetchCountries("Europe")
     }
 }
 
