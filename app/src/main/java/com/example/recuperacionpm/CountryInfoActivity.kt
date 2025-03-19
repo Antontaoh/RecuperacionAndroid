@@ -17,6 +17,7 @@ class CountryInfoActivity : AppCompatActivity() {
         val countryName = findViewById<TextView>(R.id.countryName)
         val countryCapital = findViewById<TextView>(R.id.countryCapital)
         val countryPopulation = findViewById<TextView>(R.id.countryPopulation)
+        //No he conseguido arreglar para que me salga los Borders :C
         val countryBorders = findViewById<TextView>(R.id.countryBorders)
         val flagImage = findViewById<ImageView>(R.id.flagImage)
 
